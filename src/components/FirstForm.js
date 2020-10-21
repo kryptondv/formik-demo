@@ -38,10 +38,11 @@ const FirstForm = () => {
     validate,
   });
 
-  const { errors } = formik;
+  const { errors, touched } = formik;
+
 
   const renderErrorMsg = fieldName =>
-    errors[fieldName] ? (
+    errors[fieldName] && touched[fieldName] ? (
       <Message negative visible size="mini">
         {errors[fieldName]}
       </Message>
@@ -58,6 +59,7 @@ const FirstForm = () => {
             id="name"
             onChange={formik.handleChange}
             value={formik.values.name}
+            onBlur={formik.handleBlur}
           />
           {renderErrorMsg('name')}
         </Form.Field>
@@ -70,6 +72,7 @@ const FirstForm = () => {
             id="email"
             onChange={formik.handleChange}
             value={formik.values.email}
+            onBlur={formik.handleBlur}
           />
           {renderErrorMsg('email')}
         </Form.Field>
@@ -82,6 +85,7 @@ const FirstForm = () => {
             id="github"
             onChange={formik.handleChange}
             value={formik.values.github}
+            onBlur={formik.handleBlur}
           />
           {renderErrorMsg('github')}
         </Form.Field>
