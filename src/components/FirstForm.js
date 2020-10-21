@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Segment, Message } from 'semantic-ui-react';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const FirstForm = () => {
   const initialValues = {
@@ -11,31 +12,16 @@ const FirstForm = () => {
 
   const onSubmit = values => console.log(values);
 
-  const validate = values => {
-    let errors = {};
-    const { name, email, github } = values;
-
-    if (!name) {
-      errors.name = 'Required';
-    }
-
-    if (!email) {
-      errors.email = 'Required';
-    } else if (!email.includes('@')) {
-      errors.email = 'Incorrect Email Adress';
-    }
-
-    if (!github) {
-      errors.github = 'Required';
-    }
-
-    return errors;
-  };
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Required'),
+    email: Yup.string().email('Invalid email format').required('Required'),
+    github: Yup.string().required('Required')
+  })
 
   const formik = useFormik({
     initialValues,
     onSubmit,
-    validate,
+    validationSchema
   });
 
   const { errors, touched } = formik;
