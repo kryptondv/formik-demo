@@ -1,19 +1,51 @@
 import React from 'react';
-import { Form, Segment} from 'semantic-ui-react';
+import { Form, Segment, Message } from 'semantic-ui-react';
 import { useFormik } from 'formik';
 
 const FirstForm = () => {
+  const initialValues = {
+    name: '',
+    email: '',
+    github: '',
+  };
+
+  const onSubmit = values => console.log(values);
+
+  const validate = values => {
+    let errors = {};
+    const { name, email, github } = values;
+
+    if (!name) {
+      errors.name = 'Required';
+    }
+
+    if (!email) {
+      errors.email = 'Required';
+    } else if (!email.includes('@')) {
+      errors.email = 'Incorrect Email Adress';
+    }
+
+    if (!github) {
+      errors.github = 'Required';
+    }
+
+    return errors;
+  };
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      github: ''
-    },
-    onSubmit: values => console.log(values)
+    initialValues,
+    onSubmit,
+    validate,
   });
 
-  console.log('Form values', formik.values)
+  const { errors } = formik;
+
+  const renderErrorMsg = fieldName =>
+    errors[fieldName] ? (
+      <Message negative visible size="mini">
+        {errors[fieldName]}
+      </Message>
+    ) : null;
 
   return (
     <Segment inverted>
@@ -27,6 +59,7 @@ const FirstForm = () => {
             onChange={formik.handleChange}
             value={formik.values.name}
           />
+          {renderErrorMsg('name')}
         </Form.Field>
 
         <Form.Field>
@@ -38,6 +71,7 @@ const FirstForm = () => {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
+          {renderErrorMsg('email')}
         </Form.Field>
 
         <Form.Field>
@@ -49,6 +83,7 @@ const FirstForm = () => {
             onChange={formik.handleChange}
             value={formik.values.github}
           />
+          {renderErrorMsg('github')}
         </Form.Field>
 
         <Form.Button type="submit">Submit</Form.Button>
