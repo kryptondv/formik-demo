@@ -7,6 +7,8 @@ const ThirdForm = () => {
     name: '',
     email: '',
     github: '',
+    comments: '',
+    adress: '',
   };
 
   const onSubmit = values => console.log(values);
@@ -16,7 +18,7 @@ const ThirdForm = () => {
     email: Yup.string().email('Invalid email format').required('Required'),
     github: Yup.string().required('Required'),
   });
-  
+
   return (
     <Formik
       initialValues={initialValues}
@@ -36,6 +38,22 @@ const ThirdForm = () => {
 
         <Field type="text" id="github" name="github" />
         <ErrorMessage name="github" />
+
+        <label htmlFor="comments">Comments</label>
+        <Field as="textarea" id="comments" name="comments" />
+
+        <label htmlFor="address">Address</label>
+        <Field name="address">
+          {props => {
+            const { field, meta} = props;
+            return (
+              <div>
+                <input id="address" {...field} />
+                {meta.touched && meta.error ? <div>{meta.error}</div> : null}
+              </div>
+            );
+          }}
+        </Field>
         <button type="submit">Submit</button>
       </Form>
     </Formik>
